@@ -1,0 +1,107 @@
+```json
+POST /api/agents
+{
+"name": "Công ty TNHH ABC",
+"email": "abc@company.vn",
+"phone": "0901234567",
+"address": "123 Trần Duy Hưng - Cầu Giấy, Hà Nội",
+"taxCode": "0123456789"
+}
+{
+"name": "Công ty TNHH DEF",
+"email": "def@company.vn",
+"phone": "0901234569",
+"address": "456 Trần Duy Hưng - Cầu Giấy, Hà Nội",
+"taxCode": "0123456788"
+}
+```
+
+```json
+  POST /api/categories
+{
+"name": "Nông sản",
+"description": "Các mặt hàng nông sản xuất nhập khẩu"
+}
+{
+"name": "Máy móc & Thiết bị",
+"description": "Máy móc công nghiệp, thiết bị cơ khí, dụng cụ và phụ tùng thay thế"
+}
+{
+"name": "Dệt may & Da giày",
+"description": "Quần áo, vải vóc, nguyên phụ liệu ngành dệt may và các sản phẩm giày dép"
+}
+{
+"name": "Gỗ & Sản phẩm gỗ",
+"description": "Gỗ nguyên liệu, ván ép và các sản phẩm nội thất chế biến từ gỗ"
+}
+```
+
+```json
+POST /api/products
+{
+"sku": "NS-001",
+"name": "Gạo ST25",
+"description": "Gạo thơm ST25 xuất khẩu",
+"importPrice": 18000,
+"exportPrice": 22000,
+"stockQuantity": 10000,
+"categoryId": 1
+}
+{
+"sku": "NS-002",
+"name": "Cà phê Đắk Lắk",
+"description": "Cà phê nhân xô loại 1, sơ chế ướt",
+"importPrice": 45000,
+"exportPrice": 58000,
+"stockQuantity": 5000,
+"categoryId": 1
+}
+{
+"sku": "THS-001",
+"name": "Tôm sú đông lạnh",
+"description": "Tôm sú nguyên con size 20-25 con/kg",
+"importPrice": 150000,
+"exportPrice": 210000,
+"stockQuantity": 1500,
+"categoryId": 2
+}
+{
+"sku": "DM-001",
+"name": "Vải cuộn Cotton 100%",
+"description": "Vải cotton tự nhiên nguyên cuộn dùng trong may mặc cao cấp",
+"importPrice": 60000,
+"exportPrice": 85000,
+"stockQuantity": 25000,
+"categoryId": 3
+}
+{
+"sku": "GO-001",
+"name": "Gỗ Sồi (Oak) Tròn Nhập Khẩu",
+"description": "Gỗ sồi tròn nguyên bản nhập khẩu từ Mỹ, đường kính > 40cm, chuyên dùng cho nội thất cao cấp",
+"importPrice": 12000000,
+"exportPrice": 15500000,
+"stockQuantity": 500,
+"categoryId": 4
+}
+```
+
+```json
+POST /api/orders
+{
+"agentId": 2,
+"shippingAddress": "456 Trần Duy Hưng - Cầu Giấy, Hà Nội",
+"orderlines": [
+{ "productId": 1, "quantity": 100 },
+{ "productId": 2, "quantity": 100 }
+]
+}
+```
+
+```json
+POST /api/payments
+{
+"orderId": 1,
+"amount": 11000000,
+"paymentMethod": "BANK_TRANSFER"
+}
+```

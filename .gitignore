@@ -1,0 +1,23 @@
+# Environment files — KHÔNG bao giờ commit
+.env
+.env.local
+.env.production
+.env.*.local
+
+# Build output
+target/
+build/
+node_modules/
+frontend/node_modules/
+frontend/build/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Logs
+*.log
+
+# K8s secrets thật (chỉ commit file mẫu)
+k8s/secrets/xnk-secrets-prod.yaml

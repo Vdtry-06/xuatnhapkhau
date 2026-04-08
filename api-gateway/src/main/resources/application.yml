@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: [GET, POST, PUT, DELETE, OPTIONS, PATCH]
+            allowedHeaders: "*"
+      routes:
+        - id: auth-service
+          uri: ${SERVICES_AUTH-SERVICE:http://localhost:8085}
+          predicates:
+            - Path=/api/auth/**
+
+        - id: agent-service
+          uri: ${SERVICES_AGENT-SERVICE:http://localhost:8081}
+          predicates:
+            - Path=/api/agents/**
+
+        - id: product-service
+          uri: ${SERVICES_PRODUCT-SERVICE:http://localhost:8082}
+          predicates:
+            - Path=/api/products/**, /api/categories/**
+
+        - id: supplier-service
+          uri: ${SERVICES_SUPPLIER-SERVICE:http://localhost:8086}
+          predicates:
+            - Path=/api/suppliers/**
+
+        - id: order-service
+          uri: ${SERVICES_ORDER-SERVICE:http://localhost:8083}
+          predicates:
+            - Path=/api/orders/**
+
+        - id: payment-service
+          uri: ${SERVICES_PAYMENT-SERVICE:http://localhost:8084}
+          predicates:
+            - Path=/api/payments/**
+
+jwt:
+  secret: ${JWT_SECRET:6315bda6adba581f6895708b5d100a74f55ee55d67f35a80243945d630067563}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info, gateway
+
+logging:
+  level:
+    com.xnk.gateway: INFO
+    org.springframework.cloud.gateway: WARN

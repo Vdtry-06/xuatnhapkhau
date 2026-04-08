@@ -1,0 +1,42 @@
+# ============================================================
+# ConfigMap: xnk-config
+# Chứa tất cả config KHÔNG nhạy cảm (URL, port, tên service...)
+# Thay đổi file này → apply lại → toàn bộ pod đều nhận config mới
+# kubectl apply -f k8s/configmaps/xnk-config.yaml
+# ============================================================
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: xnk-config
+  namespace: default
+  labels:
+    app: xnk
+    component: config
+data:
+  # ── Database ──────────────────────────────────────────────
+  DB_HOST: "mysql"
+  DB_PORT: "3306"
+
+  AGENT_DB_URL: "jdbc:mysql://mysql:3306/agent_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+  PRODUCT_DB_URL: "jdbc:mysql://mysql:3306/product_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+  SUPPLIER_DB_URL: "jdbc:mysql://mysql:3306/supplier_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+  ORDER_DB_URL: "jdbc:mysql://mysql:3306/order_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+  PAYMENT_DB_URL: "jdbc:mysql://mysql:3306/payment_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+  AUTH_DB_URL: "jdbc:mysql://mysql:3306/auth_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true"
+
+  # ── Service discovery (internal K8s DNS) ──────────────────
+  SERVICES_AUTH-SERVICE: "http://auth-service:8085"
+  SERVICES_AGENT-SERVICE: "http://agent-service:8081"
+  SERVICES_PRODUCT-SERVICE: "http://product-service:8082"
+  SERVICES_SUPPLIER-SERVICE: "http://supplier-service:8086"
+  SERVICES_ORDER-SERVICE: "http://order-service:8083"
+  SERVICES_PAYMENT-SERVICE: "http://payment-service:8084"
+
+  # ── JWT (non-secret config) ────────────────────────────────
+  JWT_EXPIRATION_MS: "86400000"
+
+  # ── Spring profiles ────────────────────────────────────────
+  SPRING_PROFILES_ACTIVE: "prod"
+
+  # ── Frontend ───────────────────────────────────────────────
+  REACT_APP_API_BASE_URL: "http://api-gateway:8080"
