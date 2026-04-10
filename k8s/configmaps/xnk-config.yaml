@@ -39,4 +39,4 @@ data:
   SPRING_PROFILES_ACTIVE: "prod"
 
   # ── Frontend ───────────────────────────────────────────────
-  REACT_APP_API_BASE_URL: "http://api-gateway:8080"
+  REACT_APP_API_BASE_URL: "http://xnk.vdtry06.id.vn:32327"

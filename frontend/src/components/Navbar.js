@@ -2,8 +2,17 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 const adminLinks = [
-  { path: '/admin/agents',    label: '🏢 Đại lý' },
-  { path: '/admin/suppliers', label: '🚚 Nhà cung cấp' },
+  { path: '/admin/agents',    label: 'Đại lý' },
+  { path: '/admin/suppliers', label: 'Nhà cung cấp' },
+];
+
+const agentLinks = [
+  { path: '/agent/products', label: 'Đặt hàng' },
+  { path: '/agent/orders', label: 'Đơn của tôi' },
+];
+
+const supplierLinks = [
+  { path: '/supplier/orders', label: 'Đơn cần giao' },
 ];
 
 export default function Navbar() {
@@ -28,7 +37,7 @@ export default function Navbar() {
       <div style={s.inner}>
         <div style={s.brand}
           onClick={() => navigate(homePath)}>
-          🚢 <span style={s.brandText}>XNK Portal</span>
+          <span style={s.brandText}>XNK Portal</span>
         </div>
 
         <div style={s.links}>

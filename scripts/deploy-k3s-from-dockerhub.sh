@@ -22,6 +22,8 @@ kubectl set image deployment/order-service order-service="docker.io/${DOCKERHUB_
 kubectl set image deployment/payment-service payment-service="docker.io/${DOCKERHUB_USER}/payment-service:${TAG}" -n "${NAMESPACE}"
 kubectl set image deployment/frontend frontend="docker.io/${DOCKERHUB_USER}/frontend:${TAG}" -n "${NAMESPACE}"
 
+kubectl rollout status deployment/mysql -n "${NAMESPACE}" --timeout=180s
+
 for d in auth-service api-gateway agent-service product-service supplier-service order-service payment-service frontend; do
   kubectl rollout status "deployment/${d}" -n "${NAMESPACE}" --timeout=180s
 done

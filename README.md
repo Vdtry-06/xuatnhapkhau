@@ -93,6 +93,24 @@ Neu muon chi dinh ro:
 bash scripts/deploy-k3s-from-dockerhub.sh vdtry06 v2026.04.08-r2 default
 ```
 
+Neu cluster dang bi loi MySQL nhu log `MYSQL_USER="root"` hoac cac service Java bao `Communications link failure`, chay bo lenh nay tren master truoc:
+
+```bash
+kubectl delete deployment mysql -n default
+kubectl delete pod -l app=mysql -n default --force --grace-period=0
+kubectl delete pvc mysql-pvc -n default
+kubectl apply -f k8s/configmaps/ -n default
+kubectl apply -f k8s/secrets/ -n default
+kubectl apply -f k8s/deployments/ -n default
+kubectl apply -f k8s/services/ -n default
+bash scripts/deploy-k3s-from-dockerhub.sh vdtry06 v2026.04.08-r1 default
+```
+
+Nguyen nhan goc:
+- secret mau phai dung user app `xnk`, khong duoc de `root`
+- MySQL phai mount file init SQL de tao cac database `auth_db`, `agent_db`, `product_db`, `supplier_db`, `order_db`, `payment_db`
+- script deploy nen doi MySQL san sang truoc khi cho rollout cac service Java
+
 ---
 
 ## 4. Kiem tra trang thai sau deploy
@@ -163,6 +181,12 @@ Import seed (vi du voi mysql container docker):
 docker exec -i xnk-mysql mysql -uroot -p<ROOT_PASSWORD> < docs/preorder-seed.sql
 ```
 
+Import seed trong k3s:
+
+```bash
+kubectl exec -i deployment/mysql -n default -- mysql -uroot -p'xnk@Prod#2024' < docs/preorder-seed.sql
+```
+
 ---
 
 ## 7. Nghiệp vụ UI hien tai
@@ -191,3 +215,6 @@ docker exec -i xnk-mysql mysql -uroot -p<ROOT_PASSWORD> < docs/preorder-seed.sql
   1. image tag dang chay (`kubectl describe pod ...`)
   2. rollout restart deployment tuong ung
   3. browser hard refresh / clear cache frontend
+
+
+bash scripts/build-push-one-service.sh frontend v2026.04.10-fix3 vdtry06

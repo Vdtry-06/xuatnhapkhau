@@ -152,12 +152,11 @@ metadata:
   name: xnk-ingress
   namespace: default
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
 spec:
   ingressClassName: nginx
   rules:
-    - host: xnk.example.com   # ← đổi thành domain thật khi production
+    - host: xnk.vdtry06.id.vn
       http:
         paths:
           - path: /api

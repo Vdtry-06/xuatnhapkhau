@@ -42,18 +42,31 @@ spec:
                 secretKeyRef:
                   name: xnk-secrets
                   key: DB_PASSWORD
+            - name: MYSQL_DATABASE
+              value: auth_db
           volumeMounts:
             - name: mysql-data
               mountPath: /var/lib/mysql
+            - name: mysql-init-sql
+              mountPath: /docker-entrypoint-initdb.d/01-init.sql
+              subPath: 01-init.sql
           livenessProbe:
             exec:
               command: ["mysqladmin", "ping", "-h", "localhost"]
             initialDelaySeconds: 30
             periodSeconds: 10
+          readinessProbe:
+            exec:
+              command: ["mysqladmin", "ping", "-h", "localhost"]
+            initialDelaySeconds: 15
+            periodSeconds: 10
       volumes:
         - name: mysql-data
           persistentVolumeClaim:
             claimName: mysql-pvc
+        - name: mysql-init-sql
+          configMap:
+            name: mysql-init-sql
 ---
 # ── Auth Service ─────────────────────────────────────────────
 apiVersion: apps/v1
@@ -73,8 +86,8 @@ spec:
     spec:
       containers:
         - name: auth-service
-          image: xnk/auth-service:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/auth-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8085
           env:
@@ -128,8 +141,8 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: xnk/api-gateway:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/api-gateway:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
@@ -163,6 +176,11 @@ spec:
                 configMapKeyRef:
                   name: xnk-config
                   key: SERVICES_PAYMENT-SERVICE
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xnk-secrets
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -188,8 +206,8 @@ spec:
     spec:
       containers:
         - name: agent-service
-          image: xnk/agent-service:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/agent-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8081
           env:
@@ -208,6 +226,11 @@ spec:
                 secretKeyRef:
                   name: xnk-secrets
                   key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xnk-secrets
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -233,8 +256,8 @@ spec:
     spec:
       containers:
         - name: product-service
-          image: xnk/product-service:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/product-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8082
           env:
@@ -253,6 +276,11 @@ spec:
                 secretKeyRef:
                   name: xnk-secrets
                   key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xnk-secrets
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -278,8 +306,8 @@ spec:
     spec:
       containers:
         - name: supplier-service
-          image: xnk/supplier-service:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/supplier-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8086
           env:
@@ -298,6 +326,11 @@ spec:
                 secretKeyRef:
                   name: xnk-secrets
                   key: DB_PASSWORD
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xnk-secrets
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -323,8 +356,8 @@ spec:
     spec:
       containers:
         - name: order-service
-          image: xnk/order-service:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/order-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8083
           env:
@@ -353,6 +386,11 @@ spec:
                 configMapKeyRef:
                   name: xnk-config
                   key: SERVICES_PRODUCT-SERVICE
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xnk-secrets
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -378,8 +416,8 @@ spec:
     spec:
       containers:
         - name: payment-service
-          image: xnk/payment-service:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/payment-service:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8084
           env:
@@ -403,6 +441,11 @@ spec:
                 configMapKeyRef:
                   name: xnk-config
                   key: SERVICES_ORDER-SERVICE
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: xnk-secrets
+                  key: JWT_SECRET
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -428,8 +471,8 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: xnk/frontend:latest
-          imagePullPolicy: IfNotPresent
+          image: docker.io/vdtry06/frontend:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 80
           readinessProbe:
